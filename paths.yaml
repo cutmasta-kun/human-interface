@@ -1,8 +1,8 @@
 InteractionsPath:
   post:
-    summary: Sende eine Nachricht an einen anderen Menschen
+    summary: Sende eine Nachricht an einen anderen Menschen und erstelle dabei eine Information
     description: |
-      Dieser Endpunkt erlaubt das Senden einer Nachricht an einen anderen Menschen. 
+      Dieser Endpunkt erlaubt das Senden einer Nachricht an einen anderen Menschen und das gleichzeitige Erstellen einer Information. 
       Die Anfrage wird validiert und verarbeitet, um eine entsprechende Antwort zu generieren.
     tags:
       - Kommunikation
@@ -14,7 +14,7 @@ InteractionsPath:
             $ref: 'components.yaml#/schemas/InteractionRequest'
     responses:
       '200':
-        description: Nachricht empfangen und verstanden (Standardantwort)
+        description: Nachricht empfangen und verstanden, Information erstellt (Standardantwort)
         content:
           application/json:
             schema:

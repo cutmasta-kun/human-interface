@@ -17,18 +17,3 @@ paths:
     $ref: './paths.yaml#/InteractionsPath'
   /informations:
     $ref: './paths.yaml#/InformationsPath'
-
-components:
-  schemas:
-    InteractionRequest:
-      $ref: './components.yaml#/schemas/InteractionRequest'
-    Filters:
-      $ref: './components.yaml#/schemas/Filters'
-    InteractionResponse:
-      $ref: './components.yaml#/schemas/InteractionResponse'
-    InteractionCreatedResponse:
-      $ref: './components.yaml#/schemas/InteractionCreatedResponse'
-    InformationRequest:
-      $ref: './components.yaml#/schemas/InformationRequest'
-    DetailedInformationResponse:
-      $ref: './components.yaml#/schemas/DetailedInformationResponse'

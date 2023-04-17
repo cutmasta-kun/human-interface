@@ -1,5 +1,5 @@
 schemas:
-  # Request Schemas
+# # Requests
   InformationRequest:
     type: object
     properties:
@@ -35,7 +35,7 @@ schemas:
           type: string
           format: uuid
 
-  # Response Schemas
+# # Response
   ErrorResponse:
     type: object
     properties:
@@ -110,10 +110,14 @@ schemas:
       data:
         type: object
         properties:
-          information_created:
+          interaction_created:
             type: array
             items:
               $ref: '#/schemas/InteractionRequest'
+          information_created:
+            type: array
+            items:
+              $ref: '#/schemas/InformationResponse'
 
   InteractionCreatedResponse:
     allOf:
@@ -121,7 +125,7 @@ schemas:
       - properties:
           message:
             type: string
-            example: "Interaktion erfolgreich erstellt."
+            example: "Interaktion und Information erfolgreich erstellt."
           data:
             $ref: '#/schemas/InteractionRequest'
 
@@ -138,6 +142,16 @@ schemas:
       - properties:
           message:
             example: "Nachricht empfangen und verstanden."
+          data:
+            $ref: '#/schemas/InteractionData'
+
+  InteractionData:
+    type: object
+    properties:
+      interaction_id:
+        type: string
+        format: uuid
+        example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
 
   # Helper Schemas
   Emotion:

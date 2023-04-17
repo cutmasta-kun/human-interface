@@ -4,6 +4,7 @@ CREATE TABLE persons (
 
 CREATE TABLE interactions (
   id UUID PRIMARY KEY,
+  content TEXT,
   type VARCHAR(255),
   filters JSONB,
   source_person_id UUID REFERENCES persons(id),
