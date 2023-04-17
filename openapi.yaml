@@ -1,10 +1,20 @@
-openapi: 3.0.0
+openapi: 3.0.2
 info:
+  version: '1.3.0'
   title: Menschliche Kommunikationsschnittstelle
-  version: 1.3.0
+
+servers:
+  - url: 'http://example.com/api/v1'
+  - url: 'https://example.com/api/v1'
+
+tags:
+  - name: Kommunikation
+    description: Menschliche Kommunikation
+
 paths:
   /interactions:
     $ref: './paths.yaml#/InteractionsPath'
+
 components:
   schemas:
     InteractionRequest:

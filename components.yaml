@@ -34,8 +34,7 @@ schemas:
       emotion:
         $ref: '#/schemas/Emotion'
       kultureller_hintergrund:
-        type: string
-        example: "westlich"
+        $ref: '#/schemas/KulturellerHintergrund'
     required:
       - sprache
       - emotion
@@ -61,16 +60,26 @@ schemas:
       - überrascht
     example: "glücklich"
 
+  KulturellerHintergrund:
+    type: string
+    enum:
+      - westlich
+      - östlich
+      - asiatisch
+      - lateinamerikanisch
+      - afrikanisch
+    example: "westlich"
+
   InteractionResponse:
     type: object
     properties:
-      message:
-        type: string
-        example: "Entschuldigung, das habe ich nicht verstanden."
       interaction_id:
         type: string
         format: uuid
         example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+      message:
+        type: string
+        example: "Entschuldigung, das habe ich nicht verstanden."
 
   InteractionCreatedResponse:
     type: object
