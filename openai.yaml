@@ -1,0 +1,331 @@
+openapi: 3.0.0
+info:
+  title: Menschliche Kommunikationsschnittstelle
+  version: 1.3.0
+paths:
+  /interactions:
+    post:
+      summary: Sende eine Nachricht an einen anderen Menschen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  example: "Hallo, wie geht es dir?"
+                type:
+                  type: string
+                  example: "Request"
+                filters:
+                  type: object
+                  properties:
+                    sprache:
+                      type: string
+                      example: "Deutsch"
+                    emotion:
+                      type: string
+                      example: "glücklich"
+                    kultureller_hintergrund:
+                      type: string
+                      example: "westlich"
+                  required:
+                    - sprache
+                    - emotion
+                    - kultureller_hintergrund
+                source_person_id:
+                  type: string
+                  format: uuid
+                  example: "550e8400-e29b-41d4-a716-446655440000"
+                target_person_ids:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+      responses:
+        '200':
+          description: Nachricht empfangen und verstanden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  interaction_id:
+                    type: string
+                    format: uuid
+                    example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+        '201':
+          description: Interaktion erfolgreich erstellt
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  interaction_id:
+                    type: string
+                    format: uuid
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+                  message:
+                    type: string
+                    example: "Interaktion erfolgreich erstellt."
+                  response:
+                    type: object
+                    properties:
+                      content:
+                        type: string
+                        example: "Hallo, mir geht es gut"
+                      type:
+                        type: string
+                        example: "Response"
+                      filters:
+                        type: object
+                        properties:
+                          sprache:
+                            type: string
+                            example: "Deutsch"
+                          emotion:
+                            type: string
+                            example: "neutral"
+                          kultureller_hintergrund:
+                            type: string
+                            example: "westlich"
+                        required:
+                          - sprache
+                          - emotion
+                          - kultureller_hintergrund
+                      source_person_id:
+                        type: string
+                        format: uuid
+                        example: "550e8400-e29b-41d4-a716-446655440000"
+                      target_person_ids:
+                        type: array
+                        items:
+                          type: string
+                          format: uuid
+        '400':
+          description: Nachricht nicht verstanden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Entschuldigung, das habe ich nicht verstanden."
+                  interaction_id:
+                    type: string
+                    format: uuid
+                    example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+        '422':
+          description: Nachricht erfüllt die Filterkriterien (Sprache, Emotion, kultureller Hintergrund) nicht
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Ihre Nachricht erfüllt nicht die erforderlichen Filter für Sprache, Emotion oder kulturellen Hintergrund."
+                  interaction_id:
+                    type: string
+                    format: uuid
+                    example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+  /informations:
+    post:
+      summary: Erstelle oder aktualisiere Informationen basierend auf einer Interaktion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  example: "Der Eiffelturm wurde 1889 fertiggestellt."
+                category:
+                  type: string
+                  example: "Geschichte"
+                related_information_ids:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                interaction_id:
+                  type: string
+                  format: uuid
+                  example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+      responses:
+        '200':
+          description: Information erfolgreich erstellt oder aktualisiert
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  information_id:
+                    type: string
+                    format: uuid
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+        '400':
+          description: Ungültige oder unzureichende Informationen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Entschuldigung, die bereitgestellten Informationen sind ungültig oder unzureichend."
+                  interaction_id:
+                    type: string
+                    format: uuid
+                    example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+  /emotions:
+    patch:
+      summary: Ändern des emotionalen Zustands einer Person
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                person_id:
+                  type: string
+                  format: uuid
+                  example: "550e8400-e29b-41d4-a716-446655440000"
+                new_emotion:
+                  type: string
+                  example: "glücklich"
+                interaction_id:
+                  type: string
+                  format: uuid
+                  example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+      responses:
+        '200':
+          description: Emotionaler Zustand erfolgreich geändert
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  emotion_id:
+                    type: string
+                    format: uuid
+                    example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+        '400':
+          description: Ungültige oder unzureichende Informationen zur Änderung des emotionalen Zustands
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Fehlermeldung, die darauf hinweist, dass die bereitgestellten Informationen ungültig oder unzureichend sind
+                    example: Es wurden keine gültigen Informationen zur Änderung des emotionalen Zustands bereitgestellt.
+                  interaction_id:
+                    type: string
+                    format: uuid
+                    example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+
+  /kulturen:
+    get:
+      summary: Abrufen von Informationen über kulturelle Normen und Bräuche
+      description: >
+        Ein Endpunkt, der es ermöglicht, Informationen über kulturelle Normen und Bräuche basierend auf einem bestimmten Land oder einer bestimmten Kultur abzurufen.
+      parameters:
+        - in: query
+          name: land
+          schema:
+            type: string
+          description: >
+            Das Land oder die Kultur, für die Informationen über Normen und Bräuche abgerufen werden sollen
+        - in: query
+          name: thema
+          schema:
+            type: string
+          description: >
+            Das spezifische Thema oder der Bereich von Interesse innerhalb der Kultur (z. B. Essen, Kleidung, Feiertage)
+        - in: query
+          name: interaction_id
+          schema:
+            type: string
+            format: uuid
+          description: Eine eindeutige ID für die Interaktion
+        - in: query
+          name: related_interaction_ids
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+          description: Eine Liste von eindeutigen IDs, die mit früheren verwandten Interaktionen verknüpft sind
+      responses:
+        '200':
+          description: Erfolgreiche Antwort mit den angeforderten Informationen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  information:
+                    type: string
+                    description: Informationen über die kulturellen Normen und Bräuche für das angeforderte Land oder die angeforderte Kultur
+                  interaction_id:
+                    type: string
+                    format: uuid
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+        '404':
+          description: Informationen nicht gefunden oder nicht verfügbar
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Fehlermeldung, die darauf hinweist, dass die angeforderten Informationen nicht gefunden oder nicht verfügbar sind
+                  interaction_id:
+                    type: string
+                    format: uuid
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+  /small_talk:
+    get:
+      summary: Abrufen der aktuellsten und wichtigsten Informationen für Small Talk
+      description: >
+        Dieser Endpunkt gibt die neuesten und wichtigsten Informationen zurück, die für Small Talk benötigt werden, um eine Interaction mit den richtigen Filtern erstellen zu können.
+      parameters:
+        - in: query
+          name: person_id
+          schema:
+            type: string
+            format: uuid
+          description: Die eindeutige ID der Person, für die die Small-Talk-Informationen abgerufen werden sollen
+      responses:
+        '200':
+          description: Erfolgreiche Antwort mit den aktuellsten und wichtigsten Small-Talk-Informationen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  language:
+                    type: string
+                    description: Die bevorzugte Sprache der Person
+                  emotion:
+                    type: string
+                    description: Die aktuelle Emotion der Person
+                  cultural_background:
+                    type: string
+                    description: Der kulturelle Hintergrund der Person
+        '404':
+          description: Informationen nicht gefunden oder nicht verfügbar
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Fehlermeldung, die darauf hinweist, dass die angeforderten Informationen nicht gefunden oder nicht verfügbar sind
