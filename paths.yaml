@@ -1,0 +1,33 @@
+/interactions:
+  post:
+    summary: Sende eine Nachricht an einen anderen Menschen
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: 'components.yaml#/schemas/InteractionRequest'
+    responses:
+      '200':
+        description: Nachricht empfangen und verstanden
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/schemas/InteractionResponse'
+      '201':
+        description: Interaktion erfolgreich erstellt
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/schemas/InteractionCreatedResponse'
+      '400':
+        description: Nachricht nicht verstanden
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/schemas/InteractionResponse'
+      '422':
+        description: Nachricht erfüllt die Filterkriterien (Sprache, Emotion, kultureller Hintergrund) nicht
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/schemas/InteractionResponse'

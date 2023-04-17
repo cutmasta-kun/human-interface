@@ -1,0 +1,62 @@
+schemas:
+  InteractionRequest:
+    type: object
+    properties:
+      content:
+        type: string
+        example: "Hallo, wie geht es dir?"
+      type:
+        type: string
+        example: "Request"
+      filters:
+        $ref: '#/components/schemas/Filters'
+      source_person_id:
+        type: string
+        format: uuid
+        example: "550e8400-e29b-41d4-a716-446655440000"
+      target_person_ids:
+        type: array
+        items:
+          type: string
+          format: uuid
+
+  Filters:
+    type: object
+    properties:
+      sprache:
+        type: string
+        example: "Deutsch"
+      emotion:
+        type: string
+        example: "glücklich"
+      kultureller_hintergrund:
+        type: string
+        example: "westlich"
+    required:
+      - sprache
+      - emotion
+      - kultureller_hintergrund
+
+  InteractionResponse:
+    type: object
+    properties:
+      message:
+        type: string
+        example: "Entschuldigung, das habe ich nicht verstanden."
+      interaction_id:
+        type: string
+        format: uuid
+        example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+
+  InteractionCreatedResponse:
+    type: object
+    properties:
+      interaction_id:
+        type: string
+        format: uuid
+        example: "123e4567-e89b-12d3-a456-426614174000"
+      message:
+        type: string
+        example: "Interaktion erfolgreich erstellt."
+      response:
+        $ref: '#/components/schemas/InteractionRequest'
