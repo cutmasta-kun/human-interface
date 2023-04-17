@@ -1,4 +1,20 @@
 schemas:
+  # Request Schemas
+  InformationRequest:
+    type: object
+    properties:
+      content:
+        type: string
+        example: "Der Eiffelturm wurde 1889 fertiggestellt."
+      category:
+        type: string
+        example: "Geschichte"
+      related_information_ids:
+        type: array
+        items:
+          type: string
+          format: uuid
+
   InteractionRequest:
     type: object
     properties:
@@ -19,12 +35,120 @@ schemas:
           type: string
           format: uuid
 
-  InteractionType:
+  # Response Schemas
+  ErrorResponse:
+    type: object
+    properties:
+      interaction_id:
+        type: string
+        format: uuid
+        example: "123e4567-e89b-12d3-a456-426614174000"
+      message:
+        type: string
+      error:
+        type: object
+
+  SuccessResponse:
+    type: object
+    properties:
+      interaction_id:
+        type: string
+        format: uuid
+        example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+      message:
+        type: string
+      data:
+        type: object
+
+  DetailedInformationResponse:
+    allOf:
+      - $ref: '#/schemas/SuccessResponse'
+      - properties:
+          message:
+            example: "Information erfolgreich erstellt oder aktualisiert."
+          data:
+            type: object
+            properties:
+              information_created:
+                type: array
+                items:
+                  $ref: '#/schemas/InformationRequest'
+
+  InformationCreatedResponse:
+    allOf:
+      - $ref: '#/schemas/SuccessResponse'
+      - properties:
+          message:
+            example: "Information erfolgreich erstellt oder aktualisiert."
+          data:
+            $ref: '#/schemas/InformationRequest'
+
+  InformationResponse:
+    allOf:
+      - $ref: '#/schemas/SuccessResponse'
+      - properties:
+          message:
+            example: "Information erfolgreich erstellt oder aktualisiert."
+          data:
+            type: object
+            properties:
+              information_id:
+                type: string
+                format: uuid
+                example: "123e4567-e89b-12d3-a456-426614174000"
+
+  InteractionCreatedDetailedResponse:
+    type: object
+    properties:
+      interaction_id:
+        type: string
+        format: uuid
+        example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+      message:
+        type: string
+        example: "Interaktion erfolgreich erstellt."
+      data:
+        type: object
+        properties:
+          information_created:
+            type: array
+            items:
+              $ref: '#/schemas/InteractionRequest'
+
+  InteractionCreatedResponse:
+    allOf:
+      - $ref: '#/schemas/SuccessResponse'
+      - properties:
+          message:
+            type: string
+            example: "Interaktion erfolgreich erstellt."
+          data:
+            $ref: '#/schemas/InteractionRequest'
+
+  InteractionErrorResponse:
+    allOf:
+      - $ref: '#/schemas/ErrorResponse'
+      - properties:
+          message:
+            example: "Entschuldigung, das habe ich nicht verstanden."
+
+  InteractionResponse:
+    allOf:
+      - $ref: '#/schemas/SuccessResponse'
+      - properties:
+          message:
+            example: "Nachricht empfangen und verstanden."
+
+  # Helper Schemas
+  Emotion:
     type: string
     enum:
-      - Request
-      - Response
-    example: "Request"
+      - glücklich
+      - traurig
+      - wütend
+      - ängstlich
+      - überrascht
+    example: "glücklich"
 
   Filters:
     type: object
@@ -40,25 +164,12 @@ schemas:
       - emotion
       - kultureller_hintergrund
 
-  Sprache:
+  InteractionType:
     type: string
     enum:
-      - Deutsch
-      - Englisch
-      - Französisch
-      - Spanisch
-      - Italienisch
-    example: "Deutsch"
-
-  Emotion:
-    type: string
-    enum:
-      - glücklich
-      - traurig
-      - wütend
-      - ängstlich
-      - überrascht
-    example: "glücklich"
+      - Request
+      - Response
+    example: "Request"
 
   KulturellerHintergrund:
     type: string
@@ -70,26 +181,13 @@ schemas:
       - afrikanisch
     example: "westlich"
 
-  InteractionResponse:
-    type: object
-    properties:
-      interaction_id:
-        type: string
-        format: uuid
-        example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
-      message:
-        type: string
-        example: "Entschuldigung, das habe ich nicht verstanden."
+  Sprache:
+    type: string
+    enum:
+      - Deutsch
+      - Englisch
+      - Französisch
+      - Spanisch
+      - Italienisch
+    example: "Deutsch"
 
-  InteractionCreatedResponse:
-    type: object
-    properties:
-      interaction_id:
-        type: string
-        format: uuid
-        example: "123e4567-e89b-12d3-a456-426614174000"
-      message:
-        type: string
-        example: "Interaktion erfolgreich erstellt."
-      response:
-        $ref: '#/schemas/InteractionRequest'

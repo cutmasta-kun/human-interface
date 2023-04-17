@@ -1,6 +1,12 @@
 InteractionsPath:
   post:
     summary: Sende eine Nachricht an einen anderen Menschen
+    description: |
+      Dieser Endpunkt erlaubt das Senden einer Nachricht an einen anderen Menschen. 
+      Die Anfrage wird validiert und verarbeitet, um eine entsprechende Antwort zu generieren.
+    tags:
+      - Kommunikation
+    operationId: sendInteraction
     requestBody:
       content:
         application/json:
@@ -8,26 +14,61 @@ InteractionsPath:
             $ref: 'components.yaml#/schemas/InteractionRequest'
     responses:
       '200':
-        description: Nachricht empfangen und verstanden
+        description: Nachricht empfangen und verstanden (Standardantwort)
         content:
           application/json:
             schema:
               $ref: 'components.yaml#/schemas/InteractionResponse'
-      '201':
-        description: Interaktion erfolgreich erstellt
-        content:
-          application/json:
+          application/vnd.yourapi.detailed+json:
             schema:
-              $ref: 'components.yaml#/schemas/InteractionCreatedResponse'
+              $ref: 'components.yaml#/schemas/InteractionCreatedDetailedResponse'
       '400':
         description: Nachricht nicht verstanden
         content:
           application/json:
             schema:
-              $ref: 'components.yaml#/schemas/InteractionResponse'
+              $ref: 'components.yaml#/schemas/InteractionErrorResponse'
       '422':
         description: Nachricht erfüllt die Filterkriterien (Sprache, Emotion, kultureller Hintergrund) nicht
         content:
           application/json:
             schema:
-              $ref: 'components.yaml#/schemas/InteractionResponse'
+              $ref: 'components.yaml#/schemas/InteractionErrorResponse'
+
+InformationsPath:
+  post:
+    summary: Erstelle oder aktualisiere Informationen basierend auf einer Interaktion
+    description: |
+      Dieser Endpunkt erlaubt das Erstellen oder Aktualisieren von Informationen basierend auf einer Interaktion.
+      Die Anfrage wird validiert und verarbeitet, um eine entsprechende Antwort zu generieren.
+    tags:
+      - Information
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: 'components.yaml#/schemas/InformationRequest'
+    responses:
+      '200':
+        description: Information erfolgreich erstellt oder aktualisiert
+        content:
+          application/json:
+            schema:
+              $ref: 'components.yaml#/schemas/InformationResponse'
+          application/vnd.example.detailed+json:
+            schema:
+              $ref: 'components.yaml#/schemas/DetailedInformationResponse'
+      '400':
+        description: Ungültige oder unzureichende Informationen
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Entschuldigung, die bereitgestellten Informationen sind ungültig oder unzureichend."
+                interaction_id:
+                  type: string
+                  format: uuid
+                  example: "c56a4180-65aa-42ec-a945-5fd21dec0538"

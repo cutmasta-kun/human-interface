@@ -4,16 +4,19 @@ info:
   title: Menschliche Kommunikationsschnittstelle
 
 servers:
-  - url: 'http://example.com/api/v1'
   - url: 'https://example.com/api/v1'
 
 tags:
   - name: Kommunikation
     description: Menschliche Kommunikation
+  - name: Information
+    description: Informationen übergeben
 
 paths:
   /interactions:
     $ref: './paths.yaml#/InteractionsPath'
+  /informations:
+    $ref: './paths.yaml#/InformationsPath'
 
 components:
   schemas:
@@ -25,3 +28,7 @@ components:
       $ref: './components.yaml#/schemas/InteractionResponse'
     InteractionCreatedResponse:
       $ref: './components.yaml#/schemas/InteractionCreatedResponse'
+    InformationRequest:
+      $ref: './components.yaml#/schemas/InformationRequest'
+    DetailedInformationResponse:
+      $ref: './components.yaml#/schemas/DetailedInformationResponse'
