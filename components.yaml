@@ -6,10 +6,9 @@ schemas:
         type: string
         example: "Hallo, wie geht es dir?"
       type:
-        type: string
-        example: "Request"
+        $ref: '#/schemas/InteractionType'
       filters:
-        $ref: '#/components/schemas/Filters'
+        $ref: '#/schemas/Filters'
       source_person_id:
         type: string
         format: uuid
@@ -20,15 +19,20 @@ schemas:
           type: string
           format: uuid
 
+  InteractionType:
+    type: string
+    enum:
+      - Request
+      - Response
+    example: "Request"
+
   Filters:
     type: object
     properties:
       sprache:
-        type: string
-        example: "Deutsch"
+        $ref: '#/schemas/Sprache'
       emotion:
-        type: string
-        example: "glücklich"
+        $ref: '#/schemas/Emotion'
       kultureller_hintergrund:
         type: string
         example: "westlich"
@@ -36,6 +40,26 @@ schemas:
       - sprache
       - emotion
       - kultureller_hintergrund
+
+  Sprache:
+    type: string
+    enum:
+      - Deutsch
+      - Englisch
+      - Französisch
+      - Spanisch
+      - Italienisch
+    example: "Deutsch"
+
+  Emotion:
+    type: string
+    enum:
+      - glücklich
+      - traurig
+      - wütend
+      - ängstlich
+      - überrascht
+    example: "glücklich"
 
   InteractionResponse:
     type: object
@@ -59,4 +83,4 @@ schemas:
         type: string
         example: "Interaktion erfolgreich erstellt."
       response:
-        $ref: '#/components/schemas/InteractionRequest'
+        $ref: '#/schemas/InteractionRequest'

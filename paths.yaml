@@ -1,4 +1,4 @@
-/interactions:
+InteractionsPath:
   post:
     summary: Sende eine Nachricht an einen anderen Menschen
     requestBody:
