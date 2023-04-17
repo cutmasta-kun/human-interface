@@ -35,7 +35,7 @@ schemas:
           type: string
           format: uuid
 
-# # Response
+# # Responses
   ErrorResponse:
     type: object
     properties:
@@ -57,6 +57,7 @@ schemas:
         example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
       message:
         type: string
+        example: "Danke, mir geht es gut!" # Anpassung hier
       data:
         type: object
 
@@ -81,7 +82,20 @@ schemas:
           message:
             example: "Information erfolgreich erstellt oder aktualisiert."
           data:
-            $ref: '#/schemas/InformationRequest'
+            type: object
+            properties:
+              information_id:
+                type: string
+                format: uuid
+                example: "123e4567-e89b-12d3-a456-426614174000"
+              interaction_id:
+                type: string
+                format: uuid
+                example: "f0eb1006-da8b-4133-ae61-e498f6c8ffee"
+              person_id:
+                type: string
+                format: uuid
+                example: "550e8400-e29b-41d4-a716-446655440000"
 
   InformationResponse:
     allOf:
@@ -96,6 +110,22 @@ schemas:
                 type: string
                 format: uuid
                 example: "123e4567-e89b-12d3-a456-426614174000"
+              content:
+                type: string
+                example: "Der Eiffelturm wurde 1889 fertiggestellt."
+              category:
+                type: string
+                example: "Geschichte"
+              related_information_ids:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+                  example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              person_id:
+                type: string
+                format: uuid
+                example: "550e8400-e29b-41d4-a716-446655440000"
 
   InteractionCreatedDetailedResponse:
     type: object
@@ -106,7 +136,7 @@ schemas:
         example: "c56a4180-65aa-42ec-a945-5fd21dec0538"
       message:
         type: string
-        example: "Interaktion erfolgreich erstellt."
+        example: "Danke, mir geht es gut!"
       data:
         type: object
         properties:
@@ -114,18 +144,47 @@ schemas:
             type: array
             items:
               $ref: '#/schemas/InteractionRequest'
+            example:
+              - interaction_id: "f0eb1006-da8b-4133-ae61-e498f6c8ffee"
+                content: "Hallo, wie geht es dir?"
+                type: "Request"
+                filters:
+                  sprache: "Deutsch"
+                  emotion: "glücklich"
+                  kultureller_hintergrund: "westlich"
+                source_person_id: "550e8400-e29b-41d4-a716-446655440000"
+                target_person_ids:
+                  - "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              - interaction_id: "c56a4180-65aa-42ec-a945-5fd21dec0538"
+                content: "Danke, mir geht es gut!"
+                type: "Response"
+                filters:
+                  sprache: "Deutsch"
+                  emotion: "glücklich"
+                  kultureller_hintergrund: "westlich"
+                source_person_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                target_person_ids:
+                  - "550e8400-e29b-41d4-a716-446655440000"
           information_created:
             type: array
             items:
               $ref: '#/schemas/InformationResponse'
+            example:
+              - information_id: "b3473444-2a0b-4c48-8a2d-98d56040143a"
+                content: "Ein anderer Mensch hat mich gefragt, wie es mir geht"
+                category: "Request"
+                interaction_id: "f0eb1006-da8b-4133-ae61-e498f6c8ffee"
+                person_id: "550e8400-e29b-41d4-a716-446655440000"
+              - information_id: "0acf7ad5-c1ca-4c4c-b293-fa42eba9c6ba"
+                content: "Es macht mich etwas glücklicher, dass jemand sich nach meinem Wohlbefinden erkundigt hat"
+                category: "Emotion"
+                interaction_id: "f0eb1006-da8b-4133-ae61-e498f6c8ffee"
+                person_id: "550e8400-e29b-41d4-a716-446655440000"
 
   InteractionCreatedResponse:
     allOf:
       - $ref: '#/schemas/SuccessResponse'
       - properties:
-          message:
-            type: string
-            example: "Interaktion und Information erfolgreich erstellt."
           data:
             $ref: '#/schemas/InteractionRequest'
 
@@ -140,8 +199,6 @@ schemas:
     allOf:
       - $ref: '#/schemas/SuccessResponse'
       - properties:
-          message:
-            example: "Nachricht empfangen und verstanden."
           data:
             $ref: '#/schemas/InteractionData'
 

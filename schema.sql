@@ -2,6 +2,13 @@ CREATE TABLE persons (
   id UUID PRIMARY KEY
 );
 
+CREATE TABLE clients (
+  id UUID PRIMARY KEY,
+  client_id VARCHAR(255) UNIQUE NOT NULL,
+  client_secret VARCHAR(255) NOT NULL,
+  person_id UUID REFERENCES persons(id)
+);
+
 CREATE TABLE interactions (
   id UUID PRIMARY KEY,
   content TEXT,

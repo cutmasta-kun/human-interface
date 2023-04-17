@@ -17,3 +17,17 @@ paths:
     $ref: './paths.yaml#/InteractionsPath'
   /informations:
     $ref: './paths.yaml#/InformationsPath'
+
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            information:write: Schreiben von Informationen
+
+security:
+  - OAuth2:
+      - information:write

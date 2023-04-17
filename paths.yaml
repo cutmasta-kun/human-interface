@@ -34,6 +34,7 @@ InteractionsPath:
           application/json:
             schema:
               $ref: 'components.yaml#/schemas/InteractionErrorResponse'
+    security: [] # Überschreibt die globale Sicherheitsdefinition
 
 InformationsPath:
   post:
